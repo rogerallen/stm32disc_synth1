@@ -14,4 +14,5 @@ I'm learning as I go.  Maybe this can also be useful for others.
 - create new project in STM32CubeIDE
 - select STM32F407VG-DISC1 board as starting point
 - said "no" to initializing board connections to the default setup.
-- create git repo to track (via terminal)
+- create git repo to track
+- add generated files
