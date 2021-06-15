@@ -64,7 +64,7 @@ static void MX_GPIO_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  GPIO_PinState user_button_state;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -96,6 +96,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+    user_button_state = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
+    HAL_GPIO_WritePin(GPIOD, LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin, user_button_state);
+    HAL_Delay(100);
+
   }
   /* USER CODE END 3 */
 }

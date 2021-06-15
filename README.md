@@ -16,3 +16,6 @@ I'm learning as I go.  Maybe this can also be useful for others.
 - said "no" to initializing board connections to the default setup.
 - create git repo to track
 - add generated files
+- setup Debug build & add more files
+- add basic pushbutton & LED code
+  - B1 & LD3-6 are enabled by default even though I said "no" above.
