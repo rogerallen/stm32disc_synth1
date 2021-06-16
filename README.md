@@ -44,3 +44,10 @@ I'm learning as I go.  Maybe this can also be useful for others.
 	  - DON'T use DAC or TIM2 settings
 	Note that at 23:50 he re-adjusts the project for the non-DAC method that 
 	we're going to use, putting the I2S3 back & disabling the timer.
+- add BSP audio library code
+  - follow instructions in https://community.st.com/s/question/0D50X0000AtidTb/how-to-add-bsp-library-cubemxide
+  - copy Firmware BSP folder to Drivers and trim
+  - copy Middlewares/.../PDM folder and trim
+  - copy Firmware Drivers/STM32F4xx_HAL_Driver stm32f4xx_hal_spi.[ch]
+  - uncomment HAL_SPI_MODULE_ENABLED in stm32f4xx_hal_conf.h 
+  
