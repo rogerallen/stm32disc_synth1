@@ -32,6 +32,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+// we have 4 notes, 4 leds
+#define MAX_IDX 4
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -50,6 +54,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
+uint8_t read_button_light_leds(uint8_t cur_idx);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -64,7 +70,10 @@ static void MX_GPIO_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  GPIO_PinState user_button_state;
+
+  // keep track of the current note & led index
+  uint8_t cur_idx = MAX_IDX - 1;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,9 +106,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    user_button_state = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
-    HAL_GPIO_WritePin(GPIOD, LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin, user_button_state);
-    HAL_Delay(100);
+    cur_idx = read_button_light_leds(cur_idx);
+    HAL_Delay(50);
 
   }
   /* USER CODE END 3 */
@@ -288,6 +296,33 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+// rotate clockwise
+// LD3/orange, LD5/red, LD6/blue, LD4/green
+uint16_t idx_to_led_pin[] = { LD3_Pin, LD5_Pin, LD6_Pin, LD4_Pin };
+
+// read the user button & on edges, update the LEDs & cur_idx
+// return the updated cur_idx
+uint8_t read_button_light_leds(uint8_t cur_idx) {
+
+  static GPIO_PinState last_user_button_state = GPIO_PIN_RESET;
+
+  GPIO_PinState user_button_state = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
+  if((last_user_button_state == GPIO_PIN_RESET) &&
+     (user_button_state == GPIO_PIN_SET)) {
+    HAL_GPIO_WritePin(GPIOD, idx_to_led_pin[cur_idx], GPIO_PIN_RESET);
+    cur_idx = (cur_idx+1)%MAX_IDX;
+    HAL_GPIO_WritePin(GPIOD, idx_to_led_pin[cur_idx], user_button_state);
+  }
+  else if ((last_user_button_state == GPIO_PIN_SET) &&
+           (user_button_state == GPIO_PIN_RESET)) {
+    HAL_GPIO_WritePin(GPIOD, idx_to_led_pin[cur_idx], user_button_state);
+  }
+  last_user_button_state = user_button_state;
+
+  return cur_idx;
+
+}
 
 /* USER CODE END 4 */
 
