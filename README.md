@@ -1,15 +1,34 @@
 # STM32F407VG Discovery Synth
 
 Simple wavetable synthesizer for intro to audio on this kit using STM32CubeIDE.
-I'm learning as I go.  Maybe this can also be useful for others.
+I'm learning as I go.  Sharing in case this can also be useful for others.
+
+Thanks to these YouTube videos for inspiration:
+* https://www.youtube.com/watch?v=n9Cy1xkEf1E&list=PLTNEB0-EzPluXh0d_5zRprbgRfgkrYxfO
+* https://www.youtube.com/watch?v=QIPQOnVablY
+and https://github.com/MrBlueXav/Dekrispator_v2 for showing the usage of BSP_AUDIO
 
 ## Goals
 
+- just a simple demo
+- use STM32CubeIDE
+- mainly code in a single file (main.c)
 - wavetable synth
-- use user button to switch between 4 notes
-- 4 notes displayed on LED  
+- using HAL & BSP_AUDIO Stm32 Firmware
+- user button as input for notes & animates LEDs  
+
+## Usage
+
+- git clone this repo
+- add repo to STM32CubeIDE
+- compile & run
+- press user button to play notes
 
 ## Steps
+
+If you want to do this yourself, here is a digest of how I got to this point. 
+Use https://github.com/rogerallen/stm32disc_synth1/commits/main to see how 
+things changed over time.
 
 - create new project in STM32CubeIDE
 - select STM32F407VG-DISC1 board as starting point
@@ -51,5 +70,18 @@ I'm learning as I go.  Maybe this can also be useful for others.
   - copy Firmware Drivers/STM32F4xx_HAL_Driver stm32f4xx_hal_spi.[ch]
   - uncomment HAL_SPI_MODULE_ENABLED in stm32f4xx_hal_conf.h 
 - (finally) add BSP_AUDIO_OUT code.
+- made the code a little more musical.  Calling this "done"
+
+## To Do
+
+- perhaps clean up any extra files I don't need.
+- should I try a different library than BSP_AUDIO?
+
+## License
+
+The 3-Clause BSD License.  See LICENSE.txt
+
+Copyright 2021 Roger Allen
+
 
   
