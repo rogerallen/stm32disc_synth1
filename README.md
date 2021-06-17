@@ -50,4 +50,6 @@ I'm learning as I go.  Maybe this can also be useful for others.
   - copy Middlewares/.../PDM folder and trim
   - copy Firmware Drivers/STM32F4xx_HAL_Driver stm32f4xx_hal_spi.[ch]
   - uncomment HAL_SPI_MODULE_ENABLED in stm32f4xx_hal_conf.h 
+- (finally) add BSP_AUDIO_OUT code.
+
   
