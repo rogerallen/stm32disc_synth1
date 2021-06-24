@@ -3,9 +3,12 @@
 Simple wavetable synthesizer for intro to audio on this kit using STM32CubeIDE.
 I'm learning as I go.  Sharing in case this can also be useful for others.
 
+Demo video on twitter: https://twitter.com/RogerAllen/status/1405518522185175050
+
 Thanks to these YouTube videos for inspiration:
 * https://www.youtube.com/watch?v=n9Cy1xkEf1E&list=PLTNEB0-EzPluXh0d_5zRprbgRfgkrYxfO
 * https://www.youtube.com/watch?v=QIPQOnVablY
+
 and https://github.com/MrBlueXav/Dekrispator_v2 for showing the usage of BSP_AUDIO
 
 ## Goals
