@@ -52,7 +52,11 @@
 #define AUDIO_BUFFER_SAMPLES  AUDIO_BUFFER_FRAMES * AUDIO_BUFFER_CHANNELS
 #define AUDIO_BUFFER_BYTES    sizeof(int16_t)*AUDIO_BUFFER_SAMPLES
 
-#define INITIAL_VOLUME 60
+// looking at the scope, I see
+// 88 produce a wave clamped at +/- 1.05V
+// 87 produces a very slightly clamped sine wave +/- 1.05V and
+// 86 produces a clean sine wave +/- 0.95V
+#define HARDWARE_VOLUME 86
 #define SAMPLE_RATE    48000
 float   CHROMATIC_BASE = pow(2.0f, 1.0f / 12.0f);
 
@@ -103,11 +107,12 @@ static void MX_I2C1_Init(void);
 static void MX_I2S3_Init(void);
 /* USER CODE BEGIN PFP */
 
+uint8_t update_state(uint8_t cur_idx);
 float note_to_freq(uint8_t note);
 void init_wave_table(void);
-void init_audio_buffer(void);
+uint16_t float2uint16(float f);
+void update_audio_buffer(uint32_t start_frame, uint32_t num_frames);
 void audio_init(void);
-uint8_t update_state(uint8_t cur_idx);
 
 /* USER CODE END PFP */
 
@@ -472,6 +477,15 @@ void init_wave_table(void)
 }
 
 // ======================================================================
+// float to uint16 produces two's complement values with -1.0 => 0x8001,
+// 0.0 => 0x0000 and 1.0 => 0x7fff.  It also has good rounding behavior
+// near 0.0 per https://www.cs.cmu.edu/~rbd/papers/cmj-float-to-int.html
+inline uint16_t float2uint16(float f)
+{
+  return (uint16_t)(((int16_t)(32767*f + 32768.5)) - 32768);
+}
+
+// ======================================================================
 // using cur_phase, read from wave_table[] and update the
 // audio_buffer from start to start+num_frames
 void update_audio_buffer(uint32_t start_frame, uint32_t num_frames)
@@ -481,7 +495,7 @@ void update_audio_buffer(uint32_t start_frame, uint32_t num_frames)
 
   for(int frame = start_frame; frame < start_frame+num_frames; frame++) {
     float sample_f = cur_volume * wave_table[(uint32_t)cur_wave_table_phase];
-    uint16_t sample = (uint16_t)(INT16_MAX*sample_f + INT16_MAX);
+    uint16_t sample = float2uint16(sample_f);
     // each frame is 2 samples
     audio_buffer[2*frame] = sample;
     audio_buffer[2*frame+1] = sample;
@@ -498,7 +512,7 @@ void audio_init(void)
   init_wave_table();
   update_audio_buffer(0, AUDIO_BUFFER_FRAMES);
 
-  if(BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_HEADPHONE, INITIAL_VOLUME, SAMPLE_RATE) != AUDIO_OK) {
+  if(BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_HEADPHONE, HARDWARE_VOLUME, SAMPLE_RATE) != AUDIO_OK) {
     Error_Handler();
   }
 
